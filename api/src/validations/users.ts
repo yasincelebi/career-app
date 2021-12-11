@@ -12,9 +12,14 @@ const createUserValidation = Joi.object({
   contactId: Joi.any(),
 });
 
-export default createUserValidation;
+const loginUserValidation = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});
 
-export interface ICreateUser {
+export { loginUserValidation, createUserValidation };
+
+export declare interface ICreateUser {
   name: string;
   email: string;
   password: string;
