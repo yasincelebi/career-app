@@ -124,6 +124,12 @@ CREATE TABLE "Contact" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_id_key" ON "User"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Experience_userId_key" ON "Experience"("userId");
 
 -- CreateIndex
