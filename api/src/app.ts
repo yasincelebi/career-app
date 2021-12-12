@@ -2,7 +2,7 @@ import Express from 'express';
 import helmet from 'helmet';
 
 import cors from 'cors';
-import { UserRouter } from './api-routes';
+import { CompanyRouter, UserRouter } from './api-routes';
 
 const config = require('./config');
 
@@ -24,6 +24,7 @@ app.use(
 
 // routes
 app.use('/user', UserRouter);
+app.use('/company', CompanyRouter);
 
 // start server
 app.listen(process.env.PORT, () => {
