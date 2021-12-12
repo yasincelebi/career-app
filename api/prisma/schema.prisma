@@ -11,110 +11,108 @@ datasource db {
 }
 
 model User {
-  id           String           @id @unique
-  email        String           @unique
+  id           String       @id @unique @default(uuid())
+  email        String       @unique
   password     String
-  name         String
+  name         String?
   exprerinces  Experience?
   projects     Project?
   educations   Education?
   skills       Skill?
-  Company      Company  ?     @relation(fields: [companyId], references: [id])
-  createdAt    DateTime
-  updatedAt    DateTime
-  companyId    String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
   Job          Job?
-  contact      Contact?      @relation(fields: [contactId], references: [id])
-  contactId    String?
+  contact      Contact?
   certificates Certificate?
+  Company      Company?
 }
 
 model Experience {
-  id          String      @id
-  userId      String
+  id          String   @id @unique @default(uuid())
+  userId      String   @unique
   company     String
   title       String
   description String
   startDate   DateTime
   endDate     DateTime
-  createdAt   DateTime
-  updatedAt   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   User        User     @relation(fields: [userId], references: [id])
 }
 
 model Project {
-  id          String      @id
-  userId      String
+  id          String   @id @unique @default(uuid())
+  userId      String   @unique
   title       String
   description String
   link        String
-  createdAt   DateTime
-  updatedAt   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   User        User     @relation(fields: [userId], references: [id])
 }
 
 model Education {
-  id        String      @id
-  userId    String
+  id        String   @id @unique @default(uuid())
+  userId    String   @unique
   school    String
   degree    String
   field     String
   startDate DateTime
   endDate   DateTime
-  createdAt DateTime
-  updatedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   User      User     @relation(fields: [userId], references: [id])
 }
 
 model Skill {
-  id        String      @id
-  userId    String
+  id        String   @id @unique @default(uuid())
+  userId    String   @unique
   name      String
   level     String
-  createdAt DateTime
-  updatedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   User      User     @relation(fields: [userId], references: [id])
 }
 
 model Certificate {
-  id          String      @id
-  userId      String
+  id          String   @id @unique @default(uuid())
+  userId      String   @unique
   name        String
   description String
-  createdAt   DateTime
-  updatedAt   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   User        User     @relation(fields: [userId], references: [id])
   Company     Company  @relation(fields: [companyId], references: [id])
   companyId   String
 }
 
 model Company {
-  id          String           @id
-  userId      String
-  name        String
-  description String
-  createdAt   DateTime
-  updatedAt   DateTime
+  id          String        @id @unique @default(uuid())
+  userId      String        @unique
+  name        String?
+  description String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   Jobs        Job[]
-  User        User[]
+  User        User         @relation(fields: [userId], references: [id])
   Certificate Certificate[]
 }
 
 model Job {
-  id          String      @id
+  id          String   @id @unique @default(uuid())
   companyId   String
   title       String
   description String
-  createdAt   DateTime
-  updatedAt   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   Company     Company  @relation(fields: [companyId], references: [id])
   createdBy   User     @relation(fields: [userId], references: [id])
 
-  userId String
+  userId String @unique
 }
 
 model Contact {
-  id        String      @id
+  id        String   @id @unique @default(uuid())
   userId    String
   email     String
   phone     String
@@ -124,7 +122,7 @@ model Contact {
   facebook  String
   twitter   String
   instagram String
-  createdAt DateTime
-  updatedAt DateTime
-  User      User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User     @relation(fields: [userId], references: [id])
 }
