@@ -4,6 +4,7 @@ import jsonwebtoken from 'jsonwebtoken';
 
 export interface IUserRequest extends Request {
   user?: any;
+  email?: any;
 }
 export default class Authenticate {
   public handle = (
