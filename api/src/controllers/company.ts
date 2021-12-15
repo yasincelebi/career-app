@@ -1,7 +1,8 @@
 /* eslint-disable implicit-arrow-linebreak */
-import { Request, Response } from 'express';
-import { IUserRequest } from 'src/middlewares/authenticate';
+import { NextFunction, Request, Response } from 'express';
+import { IUserRequest } from '../middlewares/authenticate';
 import CompanyService from '../services/company';
+import CustomError from './error/customError';
 
 const companyService = new CompanyService();
 export default class CompanyController {
@@ -17,6 +18,20 @@ export default class CompanyController {
     companyService
       .createCompany(req.body)
       .then((company) => res.status(200).json({ company }))
-      .catch((err) => console.log(err));
+      // eslint-disable-next-line no-console
+      .catch((_err) => console.log(_err));
+  };
+
+  // eslint-disable-next-line no-unused-vars
+  public addUserToCompany = (req: IUserRequest, res: Response, _next: NextFunction): any => {
+    if (!req.body.id) {
+      res.send(CustomError.badRequest('msg field is required and must be non blank'));
+      return;
+    }
+    companyService
+      .addUserToCompany(req.params.id, req.user.id)
+      .then((company) => res.status(200).json({ company }))
+      // eslint-disable-next-line no-console
+      .catch((_err) => console.log(_err));
   };
 }

@@ -17,11 +17,28 @@ export default class CompanyService {
   getCompanies = async (): Promise<Company[] | null> => {
     const companies = await prisma.company.findMany({
       include: {
-        User: true,
+        user: true,
       },
     });
 
     return companies;
+  };
+
+  public addUserToCompany = async (companyId: string, userId: string): Promise<Company | null> => {
+    const company = await prisma.company.update({
+      where: {
+        id: companyId,
+      },
+      data: {
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    });
+
+    return company;
   };
 
   createCompany = async (company: Company): Promise<Company | null> => {

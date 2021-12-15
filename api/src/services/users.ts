@@ -21,6 +21,9 @@ export default class UserService {
       where: {
         id,
       },
+      include: {
+        Company: true,
+      },
     });
     console.log(user);
 

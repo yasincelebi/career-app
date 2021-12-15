@@ -21,10 +21,11 @@ model User {
   skills       Skill?
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
-  Job          Job?
+  job          Job?
   contact      Contact?
   certificates Certificate?
-  Company      Company?
+  Company      Company?     @relation(fields: [companyId], references: [id])
+  companyId    String?
 }
 
 model Experience {
@@ -37,7 +38,7 @@ model Experience {
   endDate     DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  User        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
 }
 
 model Project {
@@ -48,7 +49,7 @@ model Project {
   link        String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  User        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
 }
 
 model Education {
@@ -61,7 +62,7 @@ model Education {
   endDate   DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  User      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Skill {
@@ -71,7 +72,7 @@ model Skill {
   level     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  User      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Certificate {
@@ -81,8 +82,8 @@ model Certificate {
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  User        User     @relation(fields: [userId], references: [id])
-  Company     Company  @relation(fields: [companyId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+  company     Company  @relation(fields: [companyId], references: [id])
   companyId   String
 }
 
@@ -93,9 +94,9 @@ model Company {
   description String?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-  Jobs        Job[]
-  User        User         @relation(fields: [userId], references: [id])
-  Certificate Certificate[]
+  jobs        Job[]
+  user        User[]
+  certificate Certificate[]
 }
 
 model Job {
@@ -105,7 +106,7 @@ model Job {
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  Company     Company  @relation(fields: [companyId], references: [id])
+  company     Company  @relation(fields: [companyId], references: [id])
   createdBy   User     @relation(fields: [userId], references: [id])
 
   userId String @unique
@@ -113,7 +114,7 @@ model Job {
 
 model Contact {
   id        String   @id @unique @default(uuid())
-  userId    String
+  userId    String   @unique
   email     String
   phone     String
   website   String
@@ -124,5 +125,5 @@ model Contact {
   instagram String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  User      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }

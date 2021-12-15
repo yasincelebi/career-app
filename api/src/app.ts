@@ -3,6 +3,7 @@ import helmet from 'helmet';
 
 import cors from 'cors';
 import { CompanyRouter, UserRouter } from './api-routes';
+import apiErrorHandler from './controllers/error/errorhandler';
 
 const config = require('./config');
 
@@ -21,7 +22,7 @@ app.use(
     optionsSuccessStatus: 204,
   }),
 );
-
+app.use(apiErrorHandler);
 // routes
 app.use('/user', UserRouter);
 app.use('/company', CompanyRouter);
