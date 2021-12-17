@@ -2,6 +2,7 @@ import Express from 'express';
 import helmet from 'helmet';
 
 import cors from 'cors';
+
 import { CompanyRouter, UserRouter } from './api-routes';
 import apiErrorHandler from './controllers/error/errorhandler';
 
@@ -29,5 +30,6 @@ app.use('/company', CompanyRouter);
 
 // start server
 app.listen(process.env.PORT, () => {
+  // eslint-disable-next-line no-console
   console.log('Server started on port 3000');
 });
