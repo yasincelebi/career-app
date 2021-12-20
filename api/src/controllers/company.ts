@@ -15,7 +15,7 @@ export default class CompanyController {
   public createCompany = (req: IUserRequest, res: Response): any => {
     req.body.userId = req.user.id;
     companyService
-      .create(req.body)
+      .create({ value: req.body })
       .then((company) => res.status(200).json({ company }))
       // eslint-disable-next-line no-console
       .catch((_err) => console.log(_err));

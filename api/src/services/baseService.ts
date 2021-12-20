@@ -2,48 +2,58 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-let BaseModel: keyof typeof prisma;
+type IBaseModel = keyof typeof prisma;
 
 export default class BaseService {
-  constructor(model: typeof BaseModel) {
-    BaseModel = model;
+  BaseModel: IBaseModel;
+
+  constructor(model: IBaseModel) {
+    this.BaseModel = model;
   }
 
-  public find = async ({ value }: { value: any }): Promise<void> => {
-    const result = await (prisma as any)[BaseModel].findUnique({
+  public find = async ({ where, value }: { where: string; value: any }): Promise<any> => {
+    const result = await (prisma as any)[this.BaseModel].findUnique({
       where: {
-        value,
+        [where]: value,
       },
     });
     return result;
   };
 
   public listAll = async (): Promise<void> => {
-    const result = await (prisma as any)[BaseModel].findMany();
+    const result = await (prisma as any)[this.BaseModel].findMany();
     return result;
   };
 
-  public create = async ({ value }: { value: any }): Promise<void> => {
-    const result = await (prisma as any)[BaseModel].create({
+  public create = async ({ value }: { value: any }): Promise<any> => {
+    const result = await (prisma as any)[this.BaseModel].create({
       data: value,
     });
     return result;
   };
 
-  public updateWithID = async <T>({ value }: { value: any }): Promise<T> => {
-    const result = await (prisma as any)[BaseModel].update({
+  public update = async <T>({
+    where,
+    value,
+    data,
+  }: {
+    where: string;
+    value: any;
+    data: T;
+  }): Promise<T> => {
+    const result = await (prisma as any)[this.BaseModel].update({
       where: {
-        id: value.id,
+        [where]: value,
       },
-      data: value,
+      data,
     });
     return result;
   };
 
-  public deleteWithID = async ({ value }: { value: any }): Promise<void> => {
-    const result = await (prisma as any)[BaseModel].delete({
+  public delete = async ({ where, value }: { where: string; value: string }): Promise<void> => {
+    const result = await (prisma as any)[this.BaseModel].delete({
       where: {
-        id: value.id,
+        [where]: value,
       },
     });
     return result;

@@ -6,6 +6,7 @@ CREATE TABLE "User" (
     "name" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "companyId" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -81,7 +82,6 @@ CREATE TABLE "Certificate" (
 -- CreateTable
 CREATE TABLE "Company" (
     "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
     "name" TEXT,
     "description" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -161,9 +161,6 @@ CREATE UNIQUE INDEX "Certificate_userId_key" ON "Certificate"("userId");
 CREATE UNIQUE INDEX "Company_id_key" ON "Company"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Company_userId_key" ON "Company"("userId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Job_id_key" ON "Job"("id");
 
 -- CreateIndex
@@ -174,6 +171,9 @@ CREATE UNIQUE INDEX "Contact_id_key" ON "Contact"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Contact_userId_key" ON "Contact"("userId");
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Experience" ADD CONSTRAINT "Experience_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -192,9 +192,6 @@ ALTER TABLE "Certificate" ADD CONSTRAINT "Certificate_userId_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "Certificate" ADD CONSTRAINT "Certificate_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Company" ADD CONSTRAINT "Company_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Job" ADD CONSTRAINT "Job_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

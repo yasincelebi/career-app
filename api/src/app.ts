@@ -23,11 +23,11 @@ app.use(
     optionsSuccessStatus: 204,
   }),
 );
-app.use(apiErrorHandler);
+
 // routes
 app.use('/user', UserRouter);
 app.use('/company', CompanyRouter);
-
+app.use(apiErrorHandler);
 // start server
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console

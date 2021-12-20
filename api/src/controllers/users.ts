@@ -13,7 +13,7 @@ export default class UsersController {
   public createUser = (req: Request, _res: Response): void => {
     req.body.password = userUtils.hashPassword(req.body.password);
     userService
-      .create(req.body)
+      .create({ value: req.body })
       .then((response) => {
         _res.status(httpStatus.CREATED).json(response);
       })
@@ -26,8 +26,9 @@ export default class UsersController {
     req.body.password = userUtils.hashPassword(req.body.password);
 
     userService
-      .getUserByEmail(req.body)
+      .find({ where: 'email', value: req.body.email })
       .then((user) => {
+        console.log(user);
         if (user && user?.password === req.body.password) {
           _res.status(httpStatus.OK).json({
             ...user,
@@ -47,7 +48,7 @@ export default class UsersController {
 
   public getUser = (_req: IUserRequest, _res: Response): void => {
     userService
-      .find({ value: _req.user.id })
+      .find({ where: 'id', value: _req.user.id })
       .then((result) => {
         _res.status(httpStatus.OK).json(result);
       })
@@ -58,15 +59,19 @@ export default class UsersController {
 
   public resetPassword = (req: IUserRequest, _res: Response): void => {
     userService
-      .getUserByEmail({ email: req.body.email })
+      .find({ where: 'email', value: req.body.email })
       .then((user) => {
         if (!user) {
           _res.status(httpStatus.NOT_FOUND).json({ message: 'User not found' });
         } else {
           const password = v4();
           userService
-            .updateWithID({
-              value: { id: req.user.id, password: userUtils.hashPassword(password) },
+            .update({
+              where: 'id',
+              value: user.id,
+              data: {
+                password: userUtils.hashPassword(password),
+              },
             })
             .then(() => {
               _res.status(httpStatus.OK).json({ password: password.split('-')[0] });

@@ -11,27 +11,26 @@ datasource db {
 }
 
 model User {
-  id           String       @id @unique @default(uuid())
-  email        String       @unique
+  id           String        @id @unique @default(uuid())
+  email        String        @unique
   password     String
   name         String?
-  exprerinces  Experience?
-  projects     Project?
-  educations   Education?
-  skills       Skill?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  job          Job?
+  exprerinces  Experience[]
+  projects     Project[]
+  educations   Education[]
+  skills       Skill[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   contact      Contact?
-  certificates Certificate?
-  Company      Company?     @relation(fields: [companyId], references: [id])
+  certificates Certificate[]
+  company      Company?      @relation(fields: [companyId], references: [id])
   companyId    String?
 }
 
 model Experience {
   id          String   @id @unique @default(uuid())
-  userId      String   @unique
-  company     String
+  userId      String
+  company     Company  @relation(fields: [companyId], references: [id])
   title       String
   description String
   startDate   DateTime
@@ -39,11 +38,12 @@ model Experience {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id])
+  companyId   String
 }
 
 model Project {
   id          String   @id @unique @default(uuid())
-  userId      String   @unique
+  userId      String
   title       String
   description String
   link        String
@@ -54,10 +54,10 @@ model Project {
 
 model Education {
   id        String   @id @unique @default(uuid())
-  userId    String   @unique
-  school    String
-  degree    String
-  field     String
+  userId    String
+  school    String?
+  degree    String?
+  field     String?
   startDate DateTime
   endDate   DateTime
   createdAt DateTime @default(now())
@@ -67,9 +67,9 @@ model Education {
 
 model Skill {
   id        String   @id @unique @default(uuid())
-  userId    String   @unique
+  userId    String
   name      String
-  level     String
+  level     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id])
@@ -77,26 +77,28 @@ model Skill {
 
 model Certificate {
   id          String   @id @unique @default(uuid())
-  userId      String   @unique
+  userId      String
   name        String
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id])
-  company     Company  @relation(fields: [companyId], references: [id])
+  company     Company? @relation(fields: [companyId], references: [id])
   companyId   String
 }
 
 model Company {
-  id          String        @id @unique @default(uuid())
-  userId      String        @unique
-  name        String?
-  description String?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  jobs        Job[]
-  user        User[]
-  certificate Certificate[]
+  id           String        @id @unique @default(uuid())
+  name         String?
+  description  String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  contact     Contact?     @relation(fields: [contactId], references: [id])
+  jobs         Job[]
+  users        User[]
+  certificates Certificate[]
+  Experience   Experience[]
+  contactId    String?
 }
 
 model Job {
@@ -107,9 +109,6 @@ model Job {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   company     Company  @relation(fields: [companyId], references: [id])
-  createdBy   User     @relation(fields: [userId], references: [id])
-
-  userId String @unique
 }
 
 model Contact {
@@ -125,5 +124,6 @@ model Contact {
   instagram String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
+  user      User?     @relation(fields: [userId], references: [id])
+  company  Company? 
 }

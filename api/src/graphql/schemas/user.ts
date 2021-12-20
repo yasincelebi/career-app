@@ -5,11 +5,20 @@ const userTypeDefs = gql`
     email: String!
     name: String
     id: ID!
-    Company: Company!
+    password: String
   }
   type Query {
     allUsers: [User!]!
     oneUser(id: ID!): User
+  }
+  input UserInput {
+    email: String!
+    name: String
+    id: ID!
+  }
+  type Mutation {
+    createUser(value: UserInput!): User
+    deleteUser(id: ID!): User
   }
 `;
 

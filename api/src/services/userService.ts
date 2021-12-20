@@ -11,14 +11,12 @@ export default class UserService extends BaseService {
     super('user');
   }
 
-  public getUserByEmail(email: any): Promise<User | null> {
-    const result = prisma.user.findUnique({
-      where: {
-        email,
-      },
+  public create = async ({ value }: { value: User }): Promise<User> => {
+    const result = await (prisma as any)[this.BaseModel].create({
+      data: { ...value },
     });
     return result;
-  }
+  };
 }
 
 prisma.$use(async (params: any, next) => {

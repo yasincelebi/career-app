@@ -1,19 +1,27 @@
-import { PrismaClient } from '@prisma/client';
+import { Company } from '@prisma/client';
+import CompanyService from '../../services/companyService';
 
-const prisma = new PrismaClient();
-
+const companyService = new CompanyService();
 const companyResolvers = {
   Query: {
-    allCompanies: () => prisma.company.findMany(),
-    oneCompany: (_: any, { id }: { id: string }) =>
-      prisma.company.findUnique({
-        where: {
-          id,
-        },
-        include: {
-          user: true,
-        },
-      }),
+    allCompanies: () => companyService.listAll(),
+    findOneCompany: (_: any, { where, value }: { where: string; value: string }) =>
+      companyService.find({ where, value }),
+  },
+  Mutation: {
+    updateCompany: (_: any, { where, value, data }: { where: string; value: any; data: Company }) =>
+      companyService.update({ where, value, data }),
+    createCompany: (_: any, { data }: { data: Company }) => companyService.create({ value: data }),
+    deleteCompany: (_: any, { where, value }: { where: string; value: string }) =>
+      companyService.delete({ where, value }),
+    addJobToCompany: (
+      _: any,
+      { where, value, data }: { where: string; value: string; data: any },
+    ) => companyService.addJobToCompany({ where, value, data }),
+    removeJobFromCompany: (
+      _: any,
+      { where, value, data }: { where: string; value: string; data: any },
+    ) => companyService.removeJobFromCompany({ where, value, data }),
   },
 };
 

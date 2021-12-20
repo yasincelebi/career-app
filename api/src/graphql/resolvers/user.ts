@@ -1,19 +1,22 @@
-import { PrismaClient } from '@prisma/client';
+import { User } from '@prisma/client';
+import UserUtils from '../../scripts/utils/userUtils';
+import UserService from '../../services/userService';
 
-const prisma = new PrismaClient();
-
+const userUtils = new UserUtils();
+const userService = new UserService();
 const userResolvers = {
   Query: {
-    allUsers: () => prisma.user.findMany(),
-    oneUser: (_: any, { id }: { id: string }) =>
-      prisma.user.findUnique({
-        where: {
-          id,
-        },
-        include: {
-          Company: true,
-        },
-      }),
+    allUsers: () => userService.listAll(),
+    oneUser: (_: any, { where, value }: { where: string; value: string }) =>
+      userService.find({ where, value }),
+  },
+  Mutation: {
+    createUser: (_: any, { value }: { value: User }) => {
+      const user = { ...value, password: userUtils.hashPassword(value.password) };
+      return userService.create({ value: user });
+    },
+    deleteUser: (_: any, { where, value }: { where: string; value: string }) =>
+      userService.delete({ where, value }),
   },
 };
 
