@@ -1,10 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
-const apiErrorHandler = (
-  err: { code: number; message: string },
-  _req: Request,
-  res: Response,
-): any => {
-  res.status(err.code).json(err.message);
-};
+const apiErrorHandler = (_req: Request, _res: Response, next: NextFunction): any => next();
 export default apiErrorHandler;
