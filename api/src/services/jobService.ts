@@ -6,7 +6,7 @@ export default class JobService {
     const result = await prisma.job.create({
       data: { ...value, company: { connect: { id: value.company.id } } },
     });
-    console.log(result);
+
     return result;
   };
 
