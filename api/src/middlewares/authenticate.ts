@@ -7,6 +7,21 @@ export interface IUserRequest extends Request {
   email?: any;
 }
 export default class Authenticate {
+  public getUser = (token: any): any => {
+    jsonwebtoken.verify(
+      token,
+      <string>process.env.JWT_ACCESS_TOKEN_SECRET,
+      (err: any, decoded: any) => {
+        const user = decoded;
+        if (err) {
+          return err;
+        }
+
+        return user;
+      },
+    );
+  };
+
   public handle = (
     req: IUserRequest,
     res: Response,
