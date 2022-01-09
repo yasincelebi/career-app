@@ -1,9 +1,0 @@
-/* reimport variables so we have them in app scss */
-@import "./themes/metroTheme";
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/variables";
-
-body {
-  overflow: hidden;
-}
