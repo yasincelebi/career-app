@@ -28,7 +28,6 @@ export default class UsersController {
     userService
       .find({ where: 'email', value: req.body.email })
       .then((user) => {
-        console.log(user);
         if (user && user?.password === req.body.password) {
           _res.status(httpStatus.OK).json({
             ...user,
