@@ -1,19 +1,34 @@
 import { useMutation } from '@apollo/client'
 import { joiResolver } from '@hookform/resolvers/joi'
-import React from 'react'
+import React, { useContext, useEffect, useReducer } from 'react'
 import { useForm } from 'react-hook-form'
 import { LOGIN_USER } from '../../src/api/queries'
+import { LoadingContext } from '../../src/context/LoadingContext/LoadingProvider'
+import {
+  initialState,
+  UserContext,
+} from '../../src/context/UserContext/UserProvider'
+import { UserReducer } from '../../src/context/UserContext/UserReducer'
+import { useLoading } from '../../src/hooks/useLoading'
+
 import TextInput from '../shared/Input/TextInput'
+import Spinner from '../shared/Spinner/Spinner'
+
 import { schema } from './signInSchema'
 
 const SignInForm = () => {
+  const { state, dispatch } = useContext(UserContext)
+  const { isLoading, setLoading } = useLoading()
+
   const {
     register,
     handleSubmit,
     formState: { touchedFields, errors, isSubmitted },
   } = useForm({ resolver: joiResolver(schema) })
   const [sendLogin, { data, loading, error }] = useMutation(LOGIN_USER)
+
   const onSubmit = (data: any) => {
+    setLoading(true)
     sendLogin({
       variables: {
         email: data.email,
@@ -21,14 +36,19 @@ const SignInForm = () => {
       },
     })
       .then((e) => {
-        console.log(e)
+        dispatch({ type: 'LOGIN_USER', payload: e.data.loginUser })
+        setTimeout(() => {
+          setLoading(false)
+        }, 1000)
       })
       .catch((err) => {
         console.log(err)
       })
   }
+
   return (
     <div className="w-full max-w-md mx-auto backdrop-filter backdrop-blur transition-all duration-500 ">
+      {isLoading && <Spinner />}
       <div className="bg-white rounded px-8 pt-6">
         <div className="mb-4">
           <h1 className="text-2xl font-bold text-center text-primary">
