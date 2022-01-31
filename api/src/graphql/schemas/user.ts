@@ -14,8 +14,7 @@ const userTypeDefs = gql`
   }
   input UserInput {
     email: String!
-    name: String
-    id: ID!
+
     password: String!
   }
   type LoginUser {
@@ -23,7 +22,7 @@ const userTypeDefs = gql`
     id: ID!
     accessToken: String!
     refreshToken: String!
-    name: String!
+    name: String
     password: String
   }
   type Mutation {
