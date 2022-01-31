@@ -9,7 +9,7 @@ import { schema } from './registerSchema'
 
 import { useRouter } from 'next/router'
 
-const RegisterForm = () => {
+const RegisterForm = ({ handleSignIn }: { handleSignIn?: () => void }) => {
   const {
     register,
     handleSubmit,
@@ -23,13 +23,13 @@ const RegisterForm = () => {
       variables: {
         value: {
           email: data.email,
-          id: '1234567890123',
           password: data.password,
-          name: 'yasin',
         },
       },
     })
-      .then((res, a) => {})
+      .then((res, a) => {
+        console.log(res, a)
+      })
       .catch((err) => {
         console.log(err)
       })
@@ -109,7 +109,10 @@ const RegisterForm = () => {
           </div>
           <div>
             Zaten bi hesabın var mı?{' '}
-            <span className="first-letter:pointer-events-none selection:disabled">
+            <span
+              className="first-letter:pointer-events-none selection:disabled"
+              onClick={handleSignIn}
+            >
               Giriş Yap
             </span>
           </div>
