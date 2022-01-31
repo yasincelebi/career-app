@@ -25,10 +25,12 @@ export default class UserService extends BaseService {
   }: {
     email: string;
     password: string;
-  }): Promise<LoginUser> => {
+  }): Promise<LoginUser | null> => {
     const user = await (prisma as any).user.findUnique({
       where: { email },
     });
+
+    console.log(user.password, userUtils.hashPassword(password));
 
     if (user && user?.password === userUtils.hashPassword(password)) {
       return {
@@ -36,8 +38,9 @@ export default class UserService extends BaseService {
         accessToken: userUtils.generateAccessToken(user),
         refreshToken: userUtils.generateRefreshToken(user),
       };
+    } else {
+      return null;
     }
-    return user;
   };
 }
 
