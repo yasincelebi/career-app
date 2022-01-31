@@ -17,9 +17,10 @@ app.use(Express.json());
 app.use(
   helmet({ contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false }),
 );
+const whitelist = ['http://localhost:3000', 'https://studio.apollographql.com'];
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: whitelist,
 
     credentials: true,
   }),
