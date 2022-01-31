@@ -47,7 +47,7 @@ export default function Modal({
 
   return (
     <>
-      <Portal element={element()} visible />
+      <Portal element={element()} visible={visible} />
     </>
   )
 }
