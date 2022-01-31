@@ -24,7 +24,7 @@ export default class UsersController {
 
   public loginUser = (req: Request, _res: Response): void => {
     req.body.password = userUtils.hashPassword(req.body.password);
-
+    console.log('deneme');
     userService
       .find({ where: 'email', value: req.body.email })
       .then((user) => {
