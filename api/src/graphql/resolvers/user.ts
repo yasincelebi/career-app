@@ -32,16 +32,20 @@ const userResolvers = {
       userService.delete({ where, value }),
     loginUser: (_: any, { email, password }: { email: string; password: string }, context: any) =>
       userService.loginUser({ email, password }).then((user) => {
-        context.req.res.cookie('accessToken', user.accessToken, {
-          httpOnly: true,
-          maxAge: 1000 * 60 * 60 * 24 * 7,
-        });
-        context.req.res.cookie('refreshToken', user.refreshToken, {
-          httpOnly: true,
-          maxAge: 1000 * 60 * 60 * 24 * 7,
-        });
+        if (user) {
+          context.req.res.cookie('accessToken', user.accessToken, {
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+          });
+          context.req.res.cookie('refreshToken', user.refreshToken, {
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+          });
 
-        return user;
+          return user;
+        } else {
+          return null;
+        }
       }),
   },
 };
