@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { joiResolver } from '@hookform/resolvers/joi'
+import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useReducer } from 'react'
 import { useForm } from 'react-hook-form'
 import { LOGIN_USER } from '../../src/api/queries'
@@ -10,13 +11,14 @@ import {
 } from '../../src/context/UserContext/UserProvider'
 import { UserReducer } from '../../src/context/UserContext/UserReducer'
 import { useLoading } from '../../src/hooks/useLoading'
+import useModal from '../../src/hooks/useModal'
 
 import TextInput from '../shared/Input/TextInput'
 import Spinner from '../shared/Spinner/Spinner'
 
 import { schema } from './signInSchema'
 
-const SignInForm = () => {
+const SignInForm = ({ toggle }: { toggle: () => void }) => {
   const { state, dispatch } = useContext(UserContext)
   const { isLoading, setLoading } = useLoading()
 
@@ -26,6 +28,7 @@ const SignInForm = () => {
     formState: { touchedFields, errors, isSubmitted },
   } = useForm({ resolver: joiResolver(schema) })
   const [sendLogin, { data, loading, error }] = useMutation(LOGIN_USER)
+  const router = useRouter()
 
   const onSubmit = (data: any) => {
     setLoading(true)
@@ -37,9 +40,9 @@ const SignInForm = () => {
     })
       .then((e) => {
         dispatch({ type: 'LOGIN_USER', payload: e.data.loginUser })
-        setTimeout(() => {
-          setLoading(false)
-        }, 1000)
+        setLoading(false)
+        toggle()
+        router.push('/jobs')
       })
       .catch((err) => {
         console.log(err)
@@ -48,7 +51,6 @@ const SignInForm = () => {
 
   return (
     <div className="w-full max-w-md mx-auto backdrop-filter backdrop-blur transition-all duration-500 ">
-      {isLoading && <Spinner />}
       <div className="bg-white rounded px-8 pt-6">
         <div className="mb-4">
           <h1 className="text-2xl font-bold text-center text-primary">
