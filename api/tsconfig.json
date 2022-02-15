@@ -27,7 +27,7 @@
         "experimentalDecorators": true,
         "resolveJsonModule": true,
         "baseUrl": ".",
-        "declaration": true,
+        "declaration": false,
         "declarationDir": "./types"
     },
     "exclude": [
@@ -43,6 +43,7 @@
         "./src/**/*.ts",
     ],
     "paths": {
+
         "types": [
             "types"
         ],
@@ -52,6 +53,6 @@
         "*": [
             "node_modules/*",
             "src/@types/*"
-        ]
+        ],
     }
 }
