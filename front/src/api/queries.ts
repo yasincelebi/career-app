@@ -26,10 +26,7 @@ export const LOGIN_USER = gql`
     loginUser(email: $email, password: $password) {
       email
       id
-      accessToken
-      refreshToken
       name
-      password
     }
   }
 `
