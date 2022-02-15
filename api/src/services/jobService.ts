@@ -1,7 +1,8 @@
 import { Job, PrismaClient } from '@prisma/client';
+import BaseService from './baseService';
 
 const prisma = new PrismaClient();
-export default class JobService {
+export default class JobService extends BaseService<Job> {
   public create = async ({ value }: { value: any }): Promise<any> => {
     const result = await prisma.job.create({
       data: { ...value, company: { connect: { id: value.company.id } } },
@@ -28,7 +29,7 @@ export default class JobService {
     return result;
   };
 
-  public delete = async ({ where, value }: { where: string; value: string }): Promise<Job> => {
+  delete = async ({ where, value }: { where: string; value: string }): Promise<Job | null> => {
     const result = await prisma.job.delete({
       where: {
         [where]: value,

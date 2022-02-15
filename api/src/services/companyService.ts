@@ -1,32 +1,29 @@
+import {Company, Job, PrismaClient} from '@prisma/client';
 import BaseService from './baseService';
 
-export default class CompanyService extends BaseService {
-  // eslint-disable-next-line no-useless-constructor
-  constructor() {
-    super('company');
-  }
+const prisma = new PrismaClient();
+export default class CompanyService extends BaseService<Company> {
 
   addJobToCompany = async ({
-    where,
     value,
     data,
   }: {
-    where: string;
     value: string;
-    data: any;
+    data: Job;
   }): Promise<any> => {
-    const result = await this.update({
-      where,
-      value,
+    const asd = prisma.job.create({
       data: {
-        jobs: {
+        title: data.title,
+        description: data.description,
+        company: {
           connect: {
-            id: data.id,
+            id: value,
           },
         },
       },
     });
-    return result;
+
+    return asd;
   };
 
   removeJobFromCompany = async ({
@@ -36,17 +33,27 @@ export default class CompanyService extends BaseService {
   }: {
     where: string;
     value: string;
-    data: any;
-  }): Promise<any> => {
-    const result = await this.update({
-      where,
-      value,
+    data: Job;
+  }): Promise<Company | null> => {
+    const result = await prisma.company.update({
+      where: {
+        [where]: value,
+      },
       data: {
         jobs: {
           disconnect: {
             id: data.id,
           },
         },
+      },
+    });
+    return result;
+  };
+
+  listAll = async (): Promise<any> => {
+    const result = await prisma.company.findMany({
+      include: {
+        jobs: true,
       },
     });
     return result;
