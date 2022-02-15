@@ -4,6 +4,7 @@ const companyTypeDefs = gql`
   type Company {
     name: String
     id: ID!
+    jobs: [Job]
   }
   input CompanyInput {
     name: String
