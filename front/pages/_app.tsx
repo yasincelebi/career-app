@@ -9,16 +9,16 @@ import { LoadingProvider } from '../src/context/LoadingContext/LoadingProvider'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <LoadingProvider>
-      <UserProvider>
-        <ApolloProvider client={client}>
+    <UserProvider>
+      <ApolloProvider client={client}>
+        <LoadingProvider>
           <Header />
           <Layout>
             <Component {...pageProps} />
           </Layout>
-        </ApolloProvider>
-      </UserProvider>
-    </LoadingProvider>
+        </LoadingProvider>
+      </ApolloProvider>
+    </UserProvider>
   )
 }
 
