@@ -22,14 +22,13 @@ export default class UsersController {
       });
   };
 
-  public loginUser = (req: Request, _res: Response): void => {
+  public loginUser = (req: Request, res: Response): void => {
     req.body.password = userUtils.hashPassword(req.body.password);
-    console.log('deneme');
     userService
       .find({ where: 'email', value: req.body.email })
       .then((user) => {
         if (user && user?.password === req.body.password) {
-          _res.status(httpStatus.OK).json({
+          res.status(httpStatus.OK).json({
             ...user,
             tokens: {
               accessToken: userUtils.generateAccessToken(user),
@@ -37,11 +36,11 @@ export default class UsersController {
             },
           });
         } else {
-          _res.status(httpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
+          res.status(httpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
         }
       })
       .catch((err) => {
-        _res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
       });
   };
 
@@ -69,6 +68,7 @@ export default class UsersController {
               where: 'id',
               value: user.id,
               data: {
+                ...user,
                 password: userUtils.hashPassword(password),
               },
             })
