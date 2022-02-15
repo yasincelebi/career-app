@@ -1,11 +1,12 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 
 import Button from '../Button/Button'
 import Portal from '../Portal/Portal'
 import './stil.module.css'
 import { useClickAway } from 'react-use'
+import { useLoading } from '../../../src/hooks/useLoading'
 
-export default function Modal({
+const Modal = ({
   visible,
   toggle,
   children,
@@ -15,11 +16,11 @@ export default function Modal({
   toggle: () => void
   children: ReactNode
   buttons?: ModalButtons
-}) {
+}) => {
   const dialogRef = React.createRef<HTMLDivElement>()
-
+  const { isLoading } = useLoading()
   useClickAway(dialogRef, () => {
-    visible && toggle()
+    visible && !isLoading && toggle()
   })
 
   const element = (): JSX.Element => {
@@ -51,7 +52,7 @@ export default function Modal({
     </>
   )
 }
-
+export default Modal
 export interface ModalProps {
   visible: boolean
   toggle: () => void
