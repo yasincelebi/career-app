@@ -16,8 +16,8 @@ const companyResolvers = {
       companyService.delete({ where, value }),
     addJobToCompany: (
       _: any,
-      { where, value, data }: { where: string; value: string; data: any },
-    ) => companyService.addJobToCompany({ where, value, data }),
+      { value, data }: { value: string; data: any },
+    ) => companyService.addJobToCompany({ value, data }),
     removeJobFromCompany: (
       _: any,
       { where, value, data }: { where: string; value: string; data: any },
