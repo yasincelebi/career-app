@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { CSSTransition } from 'react-transition-group'
 import { UserContext } from '../../../src/context/UserContext/UserProvider'
 import useModal from '../../../src/hooks/useModal'
@@ -9,9 +9,14 @@ import Logo from '../Logo/Logo'
 import Modal from '../Modal/Modal'
 
 const Header = () => {
-  const { toggle, visible } = useModal()
+  const [toggle, visible, setVisible] = useModal(false)
   const { state, dispatch } = useContext(UserContext)
   const [openedModal, setOpenedModal] = React.useState('')
+
+  useEffect(() => {
+    console.log(visible)
+  }, [visible])
+
   return (
     <nav className="sticky top-0 z-20 w-full backdrop-blur flex-none transition-colors duration-500  bg-gray-300">
       <div className="max-w-6xl mx-auto">
@@ -71,15 +76,17 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <CSSTransition in={visible} timeout={2000} classNames="alert">
-        <Modal visible={visible} toggle={toggle}>
-          {openedModal === 'signIn' ? (
-            <SignInForm />
-          ) : (
-            <RegisterForm handleSignIn={() => setOpenedModal('signIn')} />
-          )}
-        </Modal>
-      </CSSTransition>
+      {visible && (
+        <CSSTransition in={visible} timeout={2000} classNames="alert">
+          <Modal visible={visible} toggle={toggle}>
+            {openedModal === 'signIn' ? (
+              <SignInForm toggle={toggle} />
+            ) : (
+              <RegisterForm handleSignIn={() => setOpenedModal('signIn')} />
+            )}
+          </Modal>
+        </CSSTransition>
+      )}
     </nav>
   )
 }
