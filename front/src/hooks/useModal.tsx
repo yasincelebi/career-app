@@ -1,11 +1,19 @@
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
-const useModal = () => {
-  const [visible, setVisible] = useState(false)
-  function toggle() {
+const useModal = (
+  initialMode: boolean
+): [() => void, boolean, Dispatch<SetStateAction<boolean>>] => {
+  const [visible, setVisible] = useState<boolean>(initialMode)
+
+  const toggle = () => {
     setVisible(!visible)
   }
-  return { toggle, visible }
+
+  useEffect(() => {
+    console.log('useModal: visible', visible)
+  }, [visible])
+
+  return [toggle, visible, setVisible]
 }
 
 export default useModal
